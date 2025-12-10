@@ -1,0 +1,34 @@
+[
+    {
+        "dc_id": "DC-001",
+        "dc_name": "Syracuse Distribution Center",
+        "brand": "raymond",
+        "city": "Syracuse",
+        "state_province": "NY",
+        "country": "USA",
+        "latitude": 43.0481,
+        "longitude": -76.1474,
+        "square_footage": 250000,
+        "total_sku_count": 1800000,
+        "shipments_per_month": 15000,
+        "on_time_delivery_percent": 0.94,
+        "inventory_value_usd": 185000000,
+        "last_updated": "2025-12-10T18:30:00Z"
+    },
+    {
+        "dc_id": "DC-002",
+        "dc_name": "Columbus Distribution Center",
+        "brand": "tmh",
+        "city": "Columbus",
+        "state_province": "IN",
+        "country": "USA",
+        "latitude": 39.2014,
+        "longitude": -85.9213,
+        "square_footage": 200000,
+        "total_sku_count": 1400000,
+        "shipments_per_month": 12000,
+        "on_time_delivery_percent": 0.96,
+        "inventory_value_usd": 142000000,
+        "last_updated": "2025-12-10T18:30:00Z"
+    }
+]

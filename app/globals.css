@@ -1,26 +1,109 @@
+/* Import Tailwind CSS v4 - MUST BE FIRST */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Leaflet CSS */
+@import 'leaflet/dist/leaflet.css';
+
+/* CRITICAL: Sharp corners everywhere - NO ROUNDED CORNERS */
+* {
+  border-radius: 0 !important;
 }
 
+/* Blueprint Design System Variables */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Blueprint Colors */
+  --color-blue-1: #184A90;
+  --color-blue-2: #215DB0;
+  --color-blue-3: #2D72D2;
+  --color-blue-4: #4C90F0;
+  --color-blue-5: #8ABBFF;
+
+  --color-green-1: #165A36;
+  --color-green-2: #1C6E42;
+  --color-green-3: #238551;
+  --color-green-4: #32A467;
+  --color-green-5: #72CA9B;
+
+  --color-red-1: #8E292C;
+  --color-red-2: #AC2F33;
+  --color-red-3: #CD4246;
+  --color-red-4: #E76A6E;
+  --color-red-5: #FA999C;
+
+  --color-orange-1: #77450D;
+  --color-orange-2: #935610;
+  --color-orange-3: #C87619;
+  --color-orange-4: #EC9A3C;
+  --color-orange-5: #FBB360;
+
+  /* Dark Grays */
+  --color-dark-gray-1: #1C2127;
+  --color-dark-gray-2: #252A31;
+  --color-dark-gray-3: #2F343C;
+  --color-dark-gray-4: #383E47;
+  --color-dark-gray-5: #404854;
+
+  /* Grays */
+  --color-gray-1: #5F6B7C;
+  --color-gray-2: #738091;
+  --color-gray-3: #8F99A8;
+  --color-gray-4: #ABB3BF;
+  --color-gray-5: #C5CBD3;
+
+  /* Light Grays */
+  --color-light-gray-1: #D3D8DE;
+  --color-light-gray-2: #DCE0E5;
+  --color-light-gray-3: #E5E8EB;
+  --color-light-gray-4: #EDEFF2;
+  --color-light-gray-5: #F6F7F9;
+
+  /* Brand Colors */
+  --color-tmh-red: #EB0A1E;
+  --color-raymond-green: #00843D;
+  --color-konstant-blue: #0033A0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base Styles */
+:root {
+  --background: #1C2127;
+  --foreground: #F6F7F9;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Typography */
+h1 {
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 22px;
+  line-height: 25px;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 18px;
+  line-height: 21px;
+  font-weight: 600;
+}
+
+h5 {
+  font-size: 16px;
+  line-height: 19px;
+  font-weight: 600;
 }
