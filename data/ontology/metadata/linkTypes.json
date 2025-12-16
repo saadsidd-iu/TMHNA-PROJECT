@@ -1,0 +1,125 @@
+{
+    "linkTypes": [
+        {
+            "name": "manufactures",
+            "from": "TMHNA_Plant",
+            "to": "TMHNA_Forklift",
+            "cardinality": "one-to-many",
+            "description": "Plant manufactures forklifts",
+            "inverseName": "manufactured_at"
+        },
+        {
+            "name": "has_zone",
+            "from": "TMHNA_Plant",
+            "to": "TMHNA_FactoryZone",
+            "cardinality": "one-to-many",
+            "description": "Plant contains factory zones",
+            "inverseName": "belongs_to_plant"
+        },
+        {
+            "name": "supplies_parts_to",
+            "from": "TMHNA_DistributionCenter",
+            "to": "TMHNA_Dealer",
+            "cardinality": "many-to-many",
+            "description": "DC supplies parts to dealers"
+        },
+        {
+            "name": "stocks",
+            "from": "TMHNA_DistributionCenter",
+            "to": "TMHNA_PartsInventory",
+            "cardinality": "one-to-many",
+            "description": "DC holds parts inventory"
+        },
+        {
+            "name": "sold_through",
+            "from": "TMHNA_Forklift",
+            "to": "TMHNA_Dealer",
+            "cardinality": "many-to-one",
+            "description": "Forklift was sold through dealer"
+        },
+        {
+            "name": "serves",
+            "from": "TMHNA_Dealer",
+            "to": "TMHNA_Customer",
+            "cardinality": "many-to-many",
+            "description": "Dealer serves customers"
+        },
+        {
+            "name": "employs",
+            "from": "TMHNA_Dealer",
+            "to": "TMHNA_ServiceTechnician",
+            "cardinality": "one-to-many",
+            "description": "Dealer employs technicians"
+        },
+        {
+            "name": "owns",
+            "from": "TMHNA_Customer",
+            "to": "TMHNA_Forklift",
+            "cardinality": "one-to-many",
+            "description": "Customer owns forklifts"
+        },
+        {
+            "name": "placed",
+            "from": "TMHNA_Customer",
+            "to": "TMHNA_BacklogOrder",
+            "cardinality": "one-to-many",
+            "description": "Customer placed backlog orders"
+        },
+        {
+            "name": "has_service_order",
+            "from": "TMHNA_Forklift",
+            "to": "TMHNA_ServiceOrder",
+            "cardinality": "one-to-many",
+            "description": "Forklift has service orders"
+        },
+        {
+            "name": "assigned_to",
+            "from": "TMHNA_ServiceOrder",
+            "to": "TMHNA_ServiceTechnician",
+            "cardinality": "many-to-one",
+            "description": "Service order assigned to technician"
+        },
+        {
+            "name": "generated",
+            "from": "TMHNA_ServiceOrder",
+            "to": "TMHNA_WarrantyClaim",
+            "cardinality": "one-to-one",
+            "description": "Service order may generate warranty claim"
+        },
+        {
+            "name": "has_warranty_claim",
+            "from": "TMHNA_Forklift",
+            "to": "TMHNA_WarrantyClaim",
+            "cardinality": "one-to-many",
+            "description": "Forklift has warranty claims"
+        },
+        {
+            "name": "built_at",
+            "from": "TMHNA_WarrantyClaim",
+            "to": "TMHNA_Plant",
+            "cardinality": "many-to-one",
+            "description": "Claim references manufacturing plant"
+        },
+        {
+            "name": "tracked_by",
+            "from": "TMHNA_Forklift",
+            "to": "TMHNA_Equipment",
+            "cardinality": "one-to-one",
+            "description": "Forklift tracked by telematics device"
+        },
+        {
+            "name": "supplies",
+            "from": "TMHNA_Supplier",
+            "to": "TMHNA_PartsInventory",
+            "Cardinality": "one-to-many",
+            "description": "Supplier provides parts"
+        },
+        {
+            "name": "scheduled_at",
+            "from": "TMHNA_BacklogOrder",
+            "to": "TMHNA_Plant",
+            "cardinality": "many-to-one",
+            "description": "Order scheduled at plant"
+        }
+    ]
+}

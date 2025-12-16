@@ -1,17 +1,19 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { NavigationBar } from "@/components/common/NavigationBar";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { AuthProvider } from '@/context/AuthContext';
+import { AuthGuard } from '@/components/auth/AuthGuard';
+import { LayoutWrapper } from '@/components/common/LayoutWrapper';
 
 const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
-  title: "TMHNA Digital Momentum",
-  description: "Palantir Foundry Proof of Concept",
+  title: 'TMHNA Digital Momentum',
+  description: 'Palantir Foundry Proof of Concept',
 };
 
 export default function RootLayout({
@@ -22,8 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <NavigationBar />
-        {children}
+        <AuthProvider>
+          <AuthGuard>
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
+          </AuthGuard>
+        </AuthProvider>
       </body>
     </html>
   );

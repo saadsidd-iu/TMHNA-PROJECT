@@ -1,8 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import { Card } from '@/components/common/Card';
 import { Button } from '@/components/common/Button';
-import { Database, FileText, RefreshCw, CheckCircle, XCircle, Clock, Download } from 'lucide-react';
+import { Database, FileText, RefreshCw, CheckCircle, XCircle, Clock, Download, X } from 'lucide-react';
 
 const dataSources = [
     { name: 'SAP ECC', type: 'ERP', tables: 127, lastSync: '2 min ago', status: 'Connected', records: '2.4M' },
@@ -23,12 +24,116 @@ const datasets = [
 ];
 
 const qualityIssues = [
-    { dataset: 'Product Catalog', issue: 'Missing descriptions', count: 23, severity: 'Low' },
-    { dataset: 'Customer Master', issue: 'Duplicate records', count: 5, severity: 'Medium' },
-    { dataset: 'Equipment Metrics', issue: 'Null values', count: 142, severity: 'Low' },
+    {
+        dataset: 'Product Catalog',
+        issue: 'Missing descriptions',
+        count: 23,
+        severity: 'Low',
+        source: 'SAP ECC',
+        affectedFields: 'product_description, long_text',
+        lastDetected: '12 min ago',
+        impact: 'Affects product search and customer-facing catalog'
+    },
+    {
+        dataset: 'Customer Master',
+        issue: 'Duplicate records',
+        count: 5,
+        severity: 'Medium',
+        source: 'Snowflake',
+        affectedFields: 'customer_id, email_address',
+        lastDetected: '8 min ago',
+        impact: 'May cause incorrect billing and duplicate communications'
+    },
+    {
+        dataset: 'Equipment Metrics',
+        issue: 'Null values',
+        count: 142,
+        severity: 'Low',
+        source: 'Factory IoT',
+        affectedFields: 'temperature, pressure, vibration',
+        lastDetected: '3 min ago',
+        impact: 'Gaps in predictive maintenance analytics'
+    },
 ];
 
+// Mock sample data for each dataset (max 50 rows, 6 columns)
+const sampleData: Record<string, { columns: string[], rows: any[][] }> = {
+    'Plants Master Data': {
+        columns: ['Plant ID', 'Name', 'Location', 'Type', 'Capacity', 'Status'],
+        rows: [
+            ['PLT001', 'Columbus Manufacturing', 'Columbus, IN', 'Manufacturing', '2,500 u/mo', 'Active'],
+            ['PLT002', 'Greene Manufacturing', 'Greene, NY', 'Manufacturing', '1,800 u/mo', 'Active'],
+            ['PLT003', 'Muscatine Manufacturing', 'Muscatine, IA', 'Manufacturing', '1,200 u/mo', 'Active'],
+            ['PLT004', 'East Chicago Mfg', 'East Chicago, IN', 'Manufacturing', '950 u/mo', 'Active'],
+            ['PLT005', 'Brantford Manufacturing', 'Brantford, ON', 'Manufacturing', '800 u/mo', 'Active'],
+        ]
+    },
+    'Distribution Centers': {
+        columns: ['DC ID', 'Name', 'Location', 'SKUs', 'OTIF Rate', 'Status'],
+        rows: [
+            ['DC001', 'Syracuse DC', 'Syracuse, NY', '1.8M', '94%', 'Operational'],
+            ['DC002', 'Columbus DC', 'Columbus, IN', '1.4M', '96%', 'Operational'],
+        ]
+    },
+    'Product Catalog': {
+        columns: ['SKU', 'Product Name', 'Category', 'Brand', 'Unit Price', 'Stock'],
+        rows: Array.from({ length: 50 }, (_, i) => [
+            `SKU-${String(i + 1).padStart(5, '0')}`,
+            `Forklift Model ${['A', 'B', 'C', 'X', 'Z'][i % 5]}${100 + i}`,
+            ['Electric', 'Propane', 'Diesel', 'Electric Rider', 'Walkie'][i % 5],
+            ['TMH', 'Raymond', 'THD'][i % 3],
+            `$${(15000 + (i * 500)).toLocaleString()}`,
+            Math.floor(Math.random() * 100 + 10)
+        ])
+    },
+    'Financial Transactions': {
+        columns: ['Trans ID', 'Date', 'Type', 'Amount', 'Entity', 'Status'],
+        rows: Array.from({ length: 50 }, (_, i) => [
+            `TXN-${String(i + 1000).padStart(6, '0')}`,
+            `2024-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`,
+            ['Invoice', 'Payment', 'Credit Memo', 'Journal Entry'][i % 4],
+            `$${(Math.floor(Math.random() * 50000) + 1000).toLocaleString()}`,
+            ['TMH', 'Raymond', 'THD'][i % 3],
+            ['Posted', 'Pending', 'Cleared'][i % 3]
+        ])
+    },
+    'Customer Master': {
+        columns: ['Cust ID', 'Company Name', 'City', 'State', 'Type', 'Since'],
+        rows: Array.from({ length: 50 }, (_, i) => [
+            `CUST-${String(i + 100).padStart(5, '0')}`,
+            `Customer ${String.fromCharCode(65 + (i % 26))}${i + 1} Corp`,
+            ['Chicago', 'Detroit', 'Columbus', 'Atlanta', 'Dallas'][i % 5],
+            ['IL', 'MI', 'OH', 'GA', 'TX'][i % 5],
+            ['Dealer', 'End User', 'Fleet'][i % 3],
+            `${2018 + (i % 6)}`
+        ])
+    },
+    'Equipment Metrics': {
+        columns: ['Asset ID', 'Timestamp', 'Temp (°F)', 'Pressure', 'Vibration', 'Status'],
+        rows: Array.from({ length: 50 }, (_, i) => [
+            `EQ-${String(i + 1).padStart(4, '0')}`,
+            `2024-12-11 0${i % 10}:${String((i * 7) % 60).padStart(2, '0')}:00`,
+            `${165 + Math.floor(Math.random() * 30)}`,
+            `${45 + Math.floor(Math.random() * 15)} psi`,
+            `${(Math.random() * 2).toFixed(2)} mm/s`,
+            ['Normal', 'Warning', 'Normal', 'Normal'][i % 4]
+        ])
+    },
+    'Fleet Telemetry': {
+        columns: ['Unit ID', 'Location', 'Speed', 'Battery', 'Hours', 'Status'],
+        rows: Array.from({ length: 50 }, (_, i) => [
+            `FLT-${String(i + 1).padStart(4, '0')}`,
+            `${(40.7 + Math.random()).toFixed(4)}, ${(-74.0 + Math.random()).toFixed(4)}`,
+            `${Math.floor(Math.random() * 8)} mph`,
+            `${60 + Math.floor(Math.random() * 40)}%`,
+            `${(1000 + i * 23).toLocaleString()}`,
+            ['Moving', 'Idle', 'Charging', 'Offline'][i % 4]
+        ])
+    },
+};
+
 export default function DataManagementPage() {
+    const [selectedDataset, setSelectedDataset] = useState<string | null>(null);
     return (
         <div className="min-h-screen p-8 space-y-8">
             {/* Header */}
@@ -114,7 +219,11 @@ export default function DataManagementPage() {
                 <h3 className="text-lg font-semibold text-[#F6F7F9] mb-4">Dataset Catalog ({datasets.length})</h3>
                 <div className="space-y-2">
                     {datasets.map((dataset, idx) => (
-                        <div key={idx} className="p-3 bg-[#252A31] border border-[#404854] hover:bg-[#2F343C] cursor-pointer">
+                        <div
+                            key={idx}
+                            className="p-3 bg-[#252A31] border border-[#404854] hover:bg-[#2F343C] hover:border-[#4C90F0] cursor-pointer transition-colors"
+                            onClick={() => setSelectedDataset(dataset.name)}
+                        >
                             <div className="flex items-start justify-between">
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-1">
@@ -144,30 +253,100 @@ export default function DataManagementPage() {
                 </div>
             </Card>
 
+            {/* Dataset Preview Modal */}
+            {selectedDataset && sampleData[selectedDataset] && (
+                <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50" onClick={() => setSelectedDataset(null)}>
+                    <div
+                        className="bg-[#2F343C] border border-[#404854] shadow-2xl max-w-4xl w-full mx-4 max-h-[80vh] flex flex-col"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Modal Header */}
+                        <div className="flex items-center justify-between p-4 border-b border-[#404854]">
+                            <div className="flex items-center gap-3">
+                                <FileText className="w-5 h-5 text-[#4C90F0]" />
+                                <div>
+                                    <h3 className="font-semibold text-[#F6F7F9]">{selectedDataset}</h3>
+                                    <p className="text-xs text-[#ABB3BF]">
+                                        Showing {sampleData[selectedDataset].rows.length} of {datasets.find(d => d.name === selectedDataset)?.records.toLocaleString()} records
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setSelectedDataset(null)}
+                                className="p-1 hover:bg-[#404854] transition-colors"
+                            >
+                                <X className="w-5 h-5 text-[#ABB3BF]" />
+                            </button>
+                        </div>
+
+                        {/* Scrollable Table */}
+                        <div className="overflow-auto flex-1 p-4" style={{ maxHeight: '60vh' }}>
+                            <table className="w-full text-sm">
+                                <thead className="sticky top-0 bg-[#252A31]">
+                                    <tr>
+                                        {sampleData[selectedDataset].columns.map((col, idx) => (
+                                            <th key={idx} className="text-left py-2 px-3 text-xs uppercase tracking-wide text-[#ABB3BF] border-b border-[#404854]">
+                                                {col}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sampleData[selectedDataset].rows.map((row, rowIdx) => (
+                                        <tr key={rowIdx} className="border-b border-[#404854]/50 hover:bg-[#252A31]">
+                                            {row.map((cell, cellIdx) => (
+                                                <td key={cellIdx} className="py-2 px-3 text-[#F6F7F9]">
+                                                    {cell}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Modal Footer */}
+                        <div className="flex items-center justify-between p-4 border-t border-[#404854] bg-[#252A31]">
+                            <div className="text-xs text-[#8F99A8]">
+                                {sampleData[selectedDataset].columns.length} columns × {sampleData[selectedDataset].rows.length} rows (sample)
+                            </div>
+                            <Button variant="outlined" size="default" onClick={() => setSelectedDataset(null)}>
+                                Close
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Quality Issues */}
             <Card>
                 <h3 className="text-lg font-semibold text-[#F6F7F9] mb-4">Data Quality Issues ({qualityIssues.length})</h3>
                 <div className="space-y-2">
                     {qualityIssues.map((issue, idx) => (
                         <div key={idx} className="p-3 bg-[#252A31] border border-[#404854] flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <XCircle className={`w-5 h-5 ${issue.severity === 'High' ? 'text-[#CD4246]' :
-                                        issue.severity === 'Medium' ? 'text-[#C87619]' :
-                                            'text-[#ABB3BF]'
+                            <div className="flex items-center gap-3 flex-1">
+                                <XCircle className={`w-4 h-4 flex-shrink-0 ${issue.severity === 'High' ? 'text-[#CD4246]' :
+                                    issue.severity === 'Medium' ? 'text-[#C87619]' :
+                                        'text-[#ABB3BF]'
                                     }`} />
-                                <div>
+                                <div className="flex items-center gap-3 flex-1 text-sm">
                                     <div className="font-semibold text-[#F6F7F9]">{issue.dataset}</div>
-                                    <div className="text-sm text-[#ABB3BF]">{issue.issue}</div>
+                                    <span className="text-xs px-2 py-0.5 bg-[#2D72D2]/20 text-[#4C90F0]">{issue.source}</span>
+                                    <div className="text-[#ABB3BF]">{issue.issue}</div>
+                                    <div className="text-[#ABB3BF]">•</div>
+                                    <div className="text-[#ABB3BF]">Fields: <span className="font-mono text-xs">{issue.affectedFields}</span></div>
+                                    <div className="text-[#ABB3BF]">•</div>
+                                    <div className="text-[#ABB3BF]">{issue.lastDetected}</div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-3 ml-4 flex-shrink-0">
                                 <div className="text-right">
-                                    <div className="text-lg font-semibold text-[#F6F7F9]">{issue.count}</div>
+                                    <div className="text-xl font-semibold text-[#F6F7F9]">{issue.count}</div>
                                     <div className="text-xs text-[#ABB3BF]">Occurrences</div>
                                 </div>
-                                <span className={`px-3 py-1 text-sm ${issue.severity === 'High' ? 'bg-[#CD4246]/20 text-[#CD4246]' :
-                                        issue.severity === 'Medium' ? 'bg-[#C87619]/20 text-[#C87619]' :
-                                            'bg-[#ABB3BF]/20 text-[#ABB3BF]'
+                                <span className={`px-3 py-1 text-xs w-20 text-center ${issue.severity === 'High' ? 'bg-[#CD4246]/20 text-[#CD4246]' :
+                                    issue.severity === 'Medium' ? 'bg-[#C87619]/20 text-[#C87619]' :
+                                        'bg-[#ABB3BF]/20 text-[#ABB3BF]'
                                     }`}>
                                     {issue.severity}
                                 </span>

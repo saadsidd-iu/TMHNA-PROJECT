@@ -1,0 +1,179 @@
+{
+    "objectTypes": [
+        {
+            "name": "TMHNA_Plant",
+            "displayName": "Manufacturing Plants",
+            "description": "Production facilities that manufacture forklifts and material handling equipment",
+            "icon": "Factory",
+            "instanceCount": 5,
+            "domain": "TMHNA Enterprise",
+            "primaryKeyField": "plant_id",
+            "titleField": "plant_name",
+            "brandField": "brand",
+            "properties": 28
+        },
+        {
+            "name": "TMHNA_DistributionCenter",
+            "displayName": "Distribution Centers",
+            "description": "Parts distribution and logistics facilities serving North America",
+            "icon": "Warehouse",
+            "instanceCount": 2,
+            "domain": "TMHNA Enterprise",
+            "primaryKeyField": "dc_id",
+            "titleField": "dc_name",
+            "brandField": "brand",
+            "properties": 18
+        },
+        {
+            "name": "TMHNA_Dealer",
+            "displayName": "Dealer Network",
+            "description": "Authorized sales and service dealers across North America",
+            "icon": "Store",
+            "instanceCount": 312,
+            "domain": "Sales & Customers",
+            "primaryKeyField": "dealer_id",
+            "titleField": "dealer_name",
+            "brandField": "brand",
+            "properties": 22
+        },
+        {
+            "name": "TMHNA_Forklift",
+            "displayName": "Forklift Units",
+            "description": "Manufactured forklift units in production and installed base",
+            "icon": "Truck",
+            "instanceCount": 1500000,
+            "domain": "Manufacturing",
+            "primaryKeyField": "serial_number",
+            "titleField": "model_name",
+            "brandField": "brand",
+            "properties": 29
+        },
+        {
+            "name": "TMHNA_Customer",
+            "displayName": "Customers",
+            "description": "End customers who own and operate TMHNA equipment",
+            "icon": "Building2",
+            "instanceCount": 10000,
+            "domain": "Sales & Customers",
+            "primaryKeyField": "customer_id",
+            "titleField": "customer_name",
+            "brandField": null,
+            "properties": 19
+        },
+        {
+            "name": "TMHNA_ServiceOrder",
+            "displayName": "Service Orders",
+            "description": "Field service work orders for maintenance, repair, and warranty work",
+            "icon": "Wrench",
+            "instanceCount": 890000,
+            "domain": "Service & Support",
+            "primaryKeyField": "service_order_id",
+            "titleField": "service_order_number",
+            "brandField": null,
+            "properties": 27
+        },
+        {
+            "name": "TMHNA_ServiceTechnician",
+            "displayName": "Service Technicians",
+            "description": "Field service workforce employed by dealers",
+            "icon": "UserCog",
+            "instanceCount": 2300,
+            "domain": "Service & Support",
+            "primaryKeyField": "technician_id",
+            "titleField": "technician_name",
+            "brandField": null,
+            "properties": 20
+        },
+        {
+            "name": "TMHNA_PartsInventory",
+            "displayName": "Parts Inventory",
+            "description": "Service parts inventory across distribution centers",
+            "icon": "Box",
+            "instanceCount": 3200000,
+            "domain": "Supply Chain",
+            "primaryKeyField": "sku_id",
+            "titleField": "part_description",
+            "brandField": "brand",
+            "properties": 25
+        },
+        {
+            "name": "TMHNA_Supplier",
+            "displayName": "Suppliers",
+            "description": "Component and parts suppliers to TMHNA manufacturing and distribution",
+            "icon": "PackageCheck",
+            "instanceCount": 500,
+            "domain": "Supply Chain",
+            "primaryKeyField": "supplier_id",
+            "titleField": "supplier_name",
+            "brandField": null,
+            "properties": 20
+        },
+        {
+            "name": "TMHNA_WarrantyClaim",
+            "displayName": "Warranty Claims",
+            "description": "Product warranty claims and their resolution",
+            "icon": "Shield",
+            "instanceCount": 156000,
+            "domain": "Service & Support",
+            "primaryKeyField": "claim_id",
+            "titleField": "claim_number",
+            "brandField": null,
+            "properties": 24
+        },
+        {
+            "name": "TMHNA_BacklogOrder",
+            "displayName": "Backlog Orders",
+            "description": "Customer orders in production queue awaiting manufacturing",
+            "icon": "ClipboardList",
+            "instanceCount": 42000,
+            "domain": "Manufacturing",
+            "primaryKeyField": "order_id",
+            "titleField": "order_number",
+            "brandField": "brand",
+            "properties": 26
+        },
+        {
+            "name": "TMHNA_Equipment",
+            "displayName": "Telematics Equipment",
+            "description": "Telematics-enabled equipment with real-time operational data",
+            "icon": "Radio",
+            "instanceCount": 780000,
+            "domain": "Telematics & IoT",
+            "primaryKeyField": "equipment_id",
+            "titleField": "forklift_serial",
+            "brandField": null,
+            "properties": 30
+        },
+        {
+            "name": "TMHNA_Alert",
+            "displayName": "Operational Alerts",
+            "description": "Operational alerts and notifications requiring attention",
+            "icon": "Bell",
+            "instanceCount": null,
+            "domain": "Operations",
+            "primaryKeyField": "alert_id",
+            "titleField": "alert_title",
+            "brandField": "brand",
+            "properties": 20
+        },
+        {
+            "name": "TMHNA_FactoryZone",
+            "displayName": "Factory Zones",
+            "description": "Manufacturing zones within Columbus plant for factory floor visualization",
+            "icon": "LayoutGrid",
+            "instanceCount": 12,
+            "domain": "Manufacturing",
+            "primaryKeyField": "zone_id",
+            "titleField": "zone_name",
+            "brandField": null,
+            "properties": 20
+        }
+    ],
+    "statistics": {
+        "totalObjectTypes": 14,
+        "totalInstances": 6530029,
+        "totalRelationships": 17,
+        "totalDomains": 6,
+        "dataSourceSystems": 12
+    }
+}

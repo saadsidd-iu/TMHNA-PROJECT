@@ -80,6 +80,108 @@ export default function FactoryPage() {
                 />
             </div>
 
+            {/* Workforce Overview - NEW */}
+            <div className="grid grid-cols-3 gap-4">
+                <Card>
+                    <h3 className="text-lg font-semibold text-[#F6F7F9] mb-4">Workforce Overview</h3>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <div className="text-3xl font-semibold text-[#F6F7F9]">348</div>
+                                <div className="text-sm text-[#ABB3BF]">Workers Present</div>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-lg font-semibold text-[#238551]">94%</div>
+                                <div className="text-xs text-[#ABB3BF]">Attendance</div>
+                            </div>
+                        </div>
+                        <div className="pt-3 border-t border-[#404854]">
+                            <div className="text-sm text-[#ABB3BF] mb-2">Utilization Rate</div>
+                            <div className="flex items-center gap-3">
+                                <div className="flex-1 h-3 bg-[#252A31]">
+                                    <div className="h-full bg-[#238551]" style={{ width: '87%' }}></div>
+                                </div>
+                                <span className="text-lg font-semibold text-[#F6F7F9]">87%</span>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 pt-3 border-t border-[#404854]">
+                            <div>
+                                <div className="text-xl font-semibold text-[#F6F7F9]">116</div>
+                                <div className="text-xs text-[#ABB3BF]">Shift 1</div>
+                            </div>
+                            <div>
+                                <div className="text-xl font-semibold text-[#F6F7F9]">118</div>
+                                <div className="text-xs text-[#ABB3BF]">Shift 2</div>
+                            </div>
+                            <div>
+                                <div className="text-xl font-semibold text-[#F6F7F9]">114</div>
+                                <div className="text-xs text-[#ABB3BF]">Shift 3</div>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+
+                <Card>
+                    <h3 className="text-lg font-semibold text-[#F6F7F9] mb-4">Productivity Metrics</h3>
+                    <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-[#ABB3BF]">Units per Worker</span>
+                            <span className="text-lg font-semibold text-[#F6F7F9]">0.63</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-[#ABB3BF]">Avg Experience</span>
+                            <span className="text-lg font-semibold text-[#F6F7F9]">6.2 yrs</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-[#ABB3BF]">Safety Incidents (MTD)</span>
+                            <span className="text-lg font-semibold text-[#238551]">0</span>
+                        </div>
+                        <div className="pt-3 border-t border-[#404854]">
+                            <div className="text-xs text-[#ABB3BF] mb-1">Skill Coverage</div>
+                            <div className="grid grid-cols-2 gap-2 text-xs">
+                                <div className="text-[#F6F7F9]">Welding: <span className="text-[#238551]">98%</span></div>
+                                <div className="text-[#F6F7F9]">Assembly: <span className="text-[#238551]">100%</span></div>
+                                <div className="text-[#F6F7F9]">Fabrication: <span className="text-[#238551]">95%</span></div>
+                                <div className="text-[#F6F7F9]">QC: <span className="text-[#238551]">92%</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+
+                <Card>
+                    <h3 className="text-lg font-semibold text-[#F6F7F9] mb-4">Shift Performance</h3>
+                    <div className="space-y-3">
+                        <div>
+                            <div className="flex justify-between text-sm mb-1">
+                                <span className="text-[#ABB3BF]">Current Shift (2)</span>
+                                <span className="text-[#F6F7F9]">92% capacity</span>
+                            </div>
+                            <div className="h-2 bg-[#252A31]">
+                                <div className="h-full bg-[#2D72D2]" style={{ width: '92%' }}></div>
+                            </div>
+                        </div>
+                        <div className="pt-3 border-t border-[#404854] space-y-2">
+                            <div className="flex justify-between text-xs">
+                                <span className="text-[#ABB3BF]">Shift 1 OEE</span>
+                                <span className="text-[#F6F7F9]">91.2%</span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-[#ABB3BF]">Shift 2 OEE</span>
+                                <span className="text-[#238551]">88.7%</span>
+                            </div>
+                            <div className="flex justify-between text-xs">
+                                <span className="text-[#ABB3BF]">Shift 3 OEE</span>
+                                <span className="text-[#F6F7F9]">86.4%</span>
+                            </div>
+                        </div>
+                        <div className="pt-3 border-t border-[#404854]">
+                            <div className="text-xs text-[#ABB3BF] mb-1">Break Coverage</div>
+                            <div className="text-sm text-[#238551]">✓ All stations covered</div>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+
             {/* Production Lines */}
             <Card>
                 <h3 className="text-lg font-semibold text-[#F6F7F9] mb-4">Active Production Lines</h3>
@@ -183,10 +285,10 @@ export default function FactoryPage() {
                                     <td className="py-3 text-[#ABB3BF]">{machine.zone}</td>
                                     <td className="py-3">
                                         <span className={`inline-flex items-center gap-2 text-sm ${machine.status === 'Running' ? 'text-[#238551]' :
-                                                machine.status === 'Maintenance' ? 'text-[#C87619]' : 'text-[#CD4246]'
+                                            machine.status === 'Maintenance' ? 'text-[#C87619]' : 'text-[#CD4246]'
                                             }`}>
                                             <div className={`w-2 h-2 rounded-full ${machine.status === 'Running' ? 'bg-[#238551]' :
-                                                    machine.status === 'Maintenance' ? 'bg-[#C87619]' : 'bg-[#CD4246]'
+                                                machine.status === 'Maintenance' ? 'bg-[#C87619]' : 'bg-[#CD4246]'
                                                 } animate-pulse`}></div>
                                             {machine.status}
                                         </span>

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import { useEffect, useRef, useState } from 'react';
+import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -19,31 +19,72 @@ interface Facility {
     type: 'plant' | 'dc';
     lat: number;
     lng: number;
-    brand?: string;
-    capacity?: string;
-    utilization?: string;
-    skus?: string;
-    otif?: string;
+    location: string;
+    throughput: number;
 }
 
 const facilities: Facility[] = [
-    { id: 'PLT-001', name: 'Columbus Manufacturing', type: 'plant', lat: 39.2014, lng: -85.9213, brand: 'TMH', capacity: '2,500 u/mo', utilization: '92%' },
-    { id: 'PLT-002', name: 'Greene Manufacturing', type: 'plant', lat: 42.3289, lng: -75.7713, brand: 'Raymond', capacity: '1,800 u/mo', utilization: '89%' },
-    { id: 'PLT-003', name: 'Muscatine Manufacturing', type: 'plant', lat: 41.4242, lng: -91.0432, brand: 'Raymond', capacity: '1,200 u/mo', utilization: '85%' },
-    { id: 'PLT-004', name: 'East Chicago Heavy Duty', type: 'plant', lat: 41.6392, lng: -87.4548, brand: 'TMH', capacity: '400 u/mo', utilization: '87%' },
-    { id: 'PLT-005', name: 'Brantford Manufacturing', type: 'plant', lat: 43.1394, lng: -80.2644, brand: 'Konstant', capacity: '100 u/mo', utilization: '78%' },
-    { id: 'DC-001', name: 'Syracuse DC', type: 'dc', lat: 43.0481, lng: -76.1474, skus: '1.8M', otif: '94%' },
-    { id: 'DC-002', name: 'Columbus DC', type: 'dc', lat: 39.2014, lng: -85.9213, skus: '1.4M', otif: '96%' },
+    { id: 'PLT-001', name: 'Columbus Manufacturing', type: 'plant', lat: 39.2014, lng: -85.9213, location: 'Columbus, IN', throughput: 92 },
+    { id: 'PLT-002', name: 'Greene Manufacturing', type: 'plant', lat: 42.3289, lng: -75.7713, location: 'Greene, NY', throughput: 89 },
+    { id: 'PLT-003', name: 'Muscatine Manufacturing', type: 'plant', lat: 41.4242, lng: -91.0432, location: 'Muscatine, IA', throughput: 85 },
+    { id: 'PLT-004', name: 'East Chicago Heavy Duty', type: 'plant', lat: 41.6392, lng: -87.4548, location: 'East Chicago, IN', throughput: 87 },
+    { id: 'PLT-005', name: 'Brantford Manufacturing', type: 'plant', lat: 43.1394, lng: -80.2644, location: 'Brantford, ON', throughput: 78 },
+    { id: 'DC-001', name: 'Syracuse DC', type: 'dc', lat: 43.0481, lng: -76.1474, location: 'Syracuse, NY', throughput: 94 },
+    { id: 'DC-002', name: 'Columbus DC', type: 'dc', lat: 39.3014, lng: -85.8213, location: 'Columbus, IN', throughput: 96 },
 ];
 
-const getBrandColor = (brand?: string) => {
-    switch (brand?.toLowerCase()) {
-        case 'tmh': return '#EB0A1E';
-        case 'raymond': return '#00843D';
-        case 'konstant': return '#0033A0';
-        default: return '#4C90F0';
-    }
-};
+function LiveClock() {
+    const [time, setTime] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime(new Date());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <span style={{ fontFamily: 'monospace', color: '#4C90F0' }}>
+            {time.toLocaleTimeString('en-US', { hour12: false })}
+        </span>
+    );
+}
+
+function FacilityTooltip({ facility }: { facility: Facility }) {
+    const [time, setTime] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime(new Date());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div style={{
+            padding: '8px 12px',
+            minWidth: '180px',
+            background: '#2F343C',
+            border: '1px solid #404854',
+            borderRadius: 0,
+        }}>
+            <div style={{ fontWeight: 600, color: '#F6F7F9', marginBottom: '8px', fontSize: '14px' }}>
+                {facility.name}
+            </div>
+            <div style={{ fontSize: '12px', color: '#ABB3BF', marginBottom: '4px' }}>
+                📍 {facility.location}
+            </div>
+            <div style={{ fontSize: '12px', color: '#ABB3BF', marginBottom: '4px' }}>
+                Throughput: <span style={{ color: facility.throughput >= 90 ? '#72CA9B' : facility.throughput >= 80 ? '#FBB360' : '#FF7373', fontWeight: 600 }}>{facility.throughput}%</span>
+            </div>
+            <div style={{ fontSize: '12px', color: '#ABB3BF', borderTop: '1px solid #404854', paddingTop: '6px', marginTop: '6px' }}>
+                🕐 <span style={{ fontFamily: 'monospace', color: '#4C90F0' }}>
+                    {time.toLocaleTimeString('en-US', { hour12: false })}
+                </span>
+            </div>
+        </div>
+    );
+}
 
 export default function FacilityMap() {
     const mapRef = useRef<any>(null);
@@ -71,34 +112,40 @@ export default function FacilityMap() {
                 <CircleMarker
                     key={facility.id}
                     center={[facility.lat, facility.lng]}
-                    radius={facility.type === 'plant' ? 12 : 8}
+                    radius={8}
                     pathOptions={{
-                        fillColor: facility.type === 'plant' ? getBrandColor(facility.brand) : '#4C90F0',
-                        color: facility.type === 'plant' ? getBrandColor(facility.brand) : '#4C90F0',
-                        weight: 2,
+                        fillColor: '#FFFFFF',
+                        color: '#DC143C',
+                        weight: 1,
                         opacity: 1,
                         fillOpacity: 0.7,
                     }}
                 >
-                    <Popup>
-                        <div style={{ color: '#1C2127', padding: '4px' }}>
-                            <div style={{ fontWeight: 600, marginBottom: '4px' }}>{facility.name}</div>
-                            {facility.type === 'plant' ? (
-                                <div style={{ fontSize: '12px' }}>
-                                    <div>Capacity: {facility.capacity}</div>
-                                    <div>Utilization: {facility.utilization}</div>
-                                    <div>Brand: {facility.brand}</div>
-                                </div>
-                            ) : (
-                                <div style={{ fontSize: '12px' }}>
-                                    <div>SKUs: {facility.skus}</div>
-                                    <div>OTIF: {facility.otif}</div>
-                                </div>
-                            )}
-                        </div>
-                    </Popup>
+                    <Tooltip
+                        direction="top"
+                        offset={[0, -10]}
+                        opacity={1}
+                        className="facility-tooltip"
+                    >
+                        <FacilityTooltip facility={facility} />
+                    </Tooltip>
                 </CircleMarker>
             ))}
+
+            <style jsx global>{`
+                .facility-tooltip {
+                    background: transparent !important;
+                    border: none !important;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+                    padding: 0 !important;
+                }
+                .facility-tooltip::before {
+                    display: none !important;
+                }
+                .leaflet-tooltip-top::before {
+                    display: none !important;
+                }
+            `}</style>
         </MapContainer>
     );
 }

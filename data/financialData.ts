@@ -28,7 +28,7 @@ export const financialData = {
             ebit_usd: 20000000,
         },
         {
-            entity: "Konstant",
+            entity: "THD",
             brand: "konstant",
             revenue_usd: 29000000,
             cogs_usd: 22000000,
