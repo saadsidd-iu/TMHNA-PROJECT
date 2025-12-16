@@ -89,12 +89,7 @@ function FacilityTooltip({ facility }: { facility: Facility }) {
 export default function FacilityMap() {
     const mapRef = useRef<any>(null);
 
-    useEffect(() => {
-        // Ensure Leaflet CSS is loaded
-        if (typeof window !== 'undefined') {
-            import('leaflet/dist/leaflet.css');
-        }
-    }, []);
+
 
     return (
         <MapContainer
